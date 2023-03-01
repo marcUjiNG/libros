@@ -50,7 +50,7 @@ class BooksRepository extends ServiceEntityRepository
         $dt->setTimezone(new \DateTimeZone('Europe/London'));
         $dt->setDate(intval($year, 10), 1, 1);
         $dt->setTime(0, 0, 0, 0,);
-        dd($dt);
+        //dd($dt);
 
         $qb = $this->createQueryBuilder('b')
             ->where('b.published < :date')

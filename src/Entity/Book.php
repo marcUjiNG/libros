@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\BooksRepository;
 use Doctrine\DBAL\Types\Types;
-use Doctrine\Migrations\Configuration\Migration\JsonFile;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BooksRepository::class)]
@@ -15,8 +14,7 @@ class Book
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\Unique]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $isbn = null;
 
     #[ORM\Column(length: 255)]
@@ -189,17 +187,18 @@ class Book
 
     public function setFromJson(string $book): void
     {
+        $json[] = json_decode($book);
 
-        $this->setIsbn($file['isbn']);
-        $this->setTitle($file['title']);
-        $this->setSubtitle($file['subtitle']);
-        $this->setAuthor($file['author']);
-        $this->setPublished($file['published']);
-        $this->setPublisher($file['publisher']);
-        $this->setPages($file['pages']);
-        $this->setDescription($file['description']);
-        $this->setWebsite($file['website']);
-        $this->setCategory($file['category']);
+        $this->setIsbn($json->isbn);
+        $this->setTitle($json->title);
+        $this->setSubtitle($json->subtitle);
+        $this->setAuthor($json->author);
+        $this->setPublished($json->published);
+        $this->setPublisher($json->publisher);
+        $this->setPages($json->pages);
+        $this->setDescription($json->description);
+        $this->setWebsite($json->website);
+        $this->setCategory($json->category);
 
     }
 }

@@ -6,11 +6,9 @@ use App\Entity\Book;
 use App\Repository\BooksRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Constraints\Json;
-use Symfony\Config\Framework\RequestConfig;
 
 class BookController extends AbstractController
 {
@@ -49,6 +47,7 @@ class BookController extends AbstractController
             )
         ]);*/
     }
+
     /*
         #[Route('/book', name: 'book_list_c:', methods: ['GET'])]
         public function category(string $slug): Response
@@ -58,31 +57,38 @@ class BookController extends AbstractController
             ]);
         }
 */
+
+    public function loadFile(): Response
+    {
+        $localPackage = new UrlPackage(
+            'file:///path/to/images/',
+            new EmptyVersionStrategy()
+        );
+
+
+
+        return new Response($localPackage->getUrl('/logo.png'));
+    }
+
     #[Route('ws/add-book', name: 'add-book:')]
     public function addBook(ManagerRegistry $doctrine, BooksRepository $repo, string $query): Response
     {
-        $entityManager = $doctrine->getManager();
-
         $book = new Book();
 
         $book->setFromJson($query);
 
         $repo->save($book);
 
-
-        return $this->render('book/show.html.twig', [
-
-        ]);
+        return new Response();
     }
-/*
-        #[Route('/book/{slug}', name: 'book_remove:', methods: ['DELETE'])]
-        public function remove(string $slug): Response
-        {
-            return $this->render('book/list.html.twig', [
+    /*
+            #[Route('/book/{slug}', name: 'book_remove:', methods: ['DELETE'])]
+            public function remove(string $slug): Response
+            {
+                return $this->render('book/list.html.twig', [
 
-            ]);
-        }*/
-
+                ]);
+            }*/
 
 
 }
